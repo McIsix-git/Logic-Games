@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Logos Daily — Classical Logic Puzzles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: '#F8F5EE',
+                        'parchment-card': '#FFFDF7',
+                        ink: '#2B231D',
+                        'ink-muted': '#6E6258',
+                        burgundy: '#7A1C1C',
+                        gold: '#C59B27',
+                        borderSepia: '#E2D9C8',
+                    },
+                    fontFamily: {
+                        display: ['Cinzel', 'serif'],
+                        body: ['EB Garamond', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Mobile-friendly tap & drag styles */
+        body { user-select: none; -webkit-user-select: none; }
+        .dragging { opacity: 0.5; transform: scale(0.95); }
+        .drag-over { border-color: #7A1C1C !important; background-color: rgba(122, 28, 28, 0.08) !important; }
+        .selected-card { border-color: #7A1C1C !important; box-shadow: 0 0 0 2px #7A1C1C !important; background-color: #FFFDF7 !important; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-btn.active { border-bottom-color: #7A1C1C; color: #7A1C1C; background-color: #FFFDF7; font-weight: bold; }
+    </style>
+</head>
+<body class="bg-parchment text-ink font-body min-h-screen flex flex-col items-center p-3 sm:p-4 antialiased">
+
+    <!-- Header -->
+    <header class="w-full max-w-2xl text-center border-b-2 border-burgundy pb-3 mt-2 sm:mt-4">
+        <h1 class="font-display text-3xl sm:text-5xl font-bold tracking-wider text-burgundy">LOGOS DAILY</h1>
+        <p class="font-body italic text-ink-muted text-sm sm:text-lg mt-0.5">"Curiouser & Curiouser Logic for Sharp Minds"</p>
+    </header>
+
+    <!-- Mobile-Optimized Navigation Tabs -->
+    <nav class="w-full max-w-2xl mt-4 mb-2">
+        <div class="grid grid-cols-4 gap-1 sm:gap-2 text-center font-display text-[11px] sm:text-sm">
+            <button onclick="switchTab('taxonomy')" id="tab-taxonomy" class="tab-btn active py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🐛 Taxonomy</button>
+            <button onclick="switchTab('causality')" id="tab-causality" class="tab-btn py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🍵 Causality</button>
+            <button onclick="switchTab('syllogism')" id="tab-syllogism" class="tab-btn py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🃏 Syllogism</button>
+            <button onclick="switchTab('fallacy')" id="tab-fallacy" class="tab-btn py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🎩 Fallacy</button>
+        </div>
+    </nav>
+
+    <!-- Main Game Board -->
+    <main class="w-full max-w-2xl bg-parchment-card border border-borderSepia rounded-lg shadow-md p-4 sm:p-6 relative">
+        
+        <!-- GAME 1: TAXONOMY -->
+        <div id="content-taxonomy" class="tab-content active">
+            <div class="text-center mb-4 sm:mb-6">
+                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game I: Aristotle's Topics</span>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Caterpillar's Taxonomy</h2>
+                <p class="text-ink-muted italic text-sm sm:text-base mt-1" id="tax-prompt"></p>
+                <p class="font-sans text-[11px] text-gold font-semibold mt-1">💡 Tip: Tap a card to select it, then tap a bucket to place it!</p>
+            </div>
+            
+            <div class="mb-4 sm:mb-6 p-3 border-2 border-dashed border-borderSepia/60 min-h-[90px] rounded dropzone" id="queue" onclick="handleContainerTap(event, 'queue')" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="grid gap-2 sm:gap-3" id="tax-cards"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6" id="tax-buckets"></div>
+            
+            <div class="flex justify-center">
+                <button onclick="checkTaxonomy()" class="bg-burgundy text-parchment font-display font-bold px-6 py-3 rounded-full shadow-lg hover:-translate-y-0.5 transition w-full sm:w-auto text-sm sm:text-base active:bg-burgundy/90">✒️ STAMP DEDUCTION</button>
+            </div>
+            <div id="tax-result" class="mt-4 text-center font-display text-lg sm:text-xl font-bold"></div>
+        </div>
+
+        <!-- GAME 2: CAUSALITY -->
+        <div id="content-causality" class="tab-content">
+            <div class="text-center mb-4 sm:mb-6">
+                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game II: Mill's Methods</span>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Duchess's Kitchen</h2>
+                <p class="text-ink-muted italic text-sm sm:text-base mt-1" id="cause-prompt"></p>
+            </div>
+            <div class="bg-parchment border border-borderSepia rounded p-3 sm:p-4 mb-4 text-xs sm:text-sm" id="cause-runs"></div>
+            <div class="grid grid-cols-2 gap-2 mb-6" id="cause-options"></div>
+            <div id="cause-result" class="mt-4 text-center font-display text-lg sm:text-xl font-bold"></div>
+        </div>
+
+        <!-- GAME 3: SYLLOGISM -->
+        <div id="content-syllogism" class="tab-content">
+            <div class="text-center mb-4 sm:mb-6">
+                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game III: Formal Logic</span>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Jabberwocky Chain</h2>
+                <p class="text-ink-muted italic text-sm sm:text-base mt-1">Identify the valid conclusion from the premises below.</p>
+            </div>
+            <div class="bg-parchment border border-borderSepia rounded p-3 sm:p-4 mb-4 text-sm sm:text-lg font-bold" id="syl-premises"></div>
+            <div class="grid gap-2 sm:gap-3 mb-6 text-sm sm:text-base" id="syl-options"></div>
+            <div id="syl-result" class="mt-4 text-center font-display text-lg sm:text-xl font-bold"></div>
+        </div>
+
+        <!-- GAME 4: FALLACY -->
+        <div id="content-fallacy" class="tab-content">
+            <div class="text-center mb-4 sm:mb-6">
+                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game IV: Informal Logic</span>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Mad Hatter's Debate</h2>
+                <p class="text-ink-muted italic text-sm sm:text-base mt-1">Identify the logical fallacy committed in the quote below.</p>
+            </div>
+            <div class="bg-parchment border border-borderSepia rounded p-3 sm:p-4 mb-4 text-sm sm:text-lg italic text-center font-bold text-burgundy" id="fal-quote"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6 text-sm sm:text-base" id="fal-options"></div>
+            <div id="fal-result" class="mt-4 text-center font-display text-lg sm:text-xl font-bold"></div>
+        </div>
+
+    </main>
+
+    <script>
+        const db = {
+            taxonomy: [
+                {
+                    prompt: "Sort the observations regarding a Vorpal Sword and a Snark.",
+                    cards: [
+                        { id: "t1", text: "A Vorpal Sword is a blade that goes snicker-snack.", type: "definition" },
+                        { id: "t2", text: "A Snark is far harder to catch than a Sword.", type: "degree" }
+                    ],
+                    buckets: [
+                        { id: "definition", icon: "✒️", name: "DEFINITION", desc: "Essence & Genus" },
+                        { id: "degree", icon: "⚖️", name: "DEGREE", desc: "Greater / Lesser" }
+                    ]
+                },
+                {
+                    prompt: "Sort the observations regarding a Flamingo Mallet and a Hedgehog Ball.",
+                    cards: [
+                        { id: "t3", text: "Striking the Hedgehog too firmly causes it to walk away.", type: "cause" },
+                        { id: "t4", text: "The opposite of an uncooperative Hedgehog is a Stone Sphere.", type: "opposition" }
+                    ],
+                    buckets: [
+                        { id: "cause", icon: "⚡", name: "CAUSE & EFFECT", desc: "Origins / Results" },
+                        { id: "opposition", icon: "☯️", name: "OPPOSITION", desc: "Contraries" }
+                    ]
+                }
+            ],
+            causality: [
+                {
+                    prompt: "Why does the Cheshire Cat keep vanishing?",
+                    runs: [
+                        "Run 1: Pepper, Duchess Singing, Crown -> Cat Visible",
+                        "Run 2: Pepper, Duchess Silent, Crown -> Cat Vanishes",
+                        "Run 3: Milk Spilled, Duchess Silent, Crown -> Cat Vanishes"
+                    ],
+                    options: ["Pepper", "Duchess Silent", "Crown", "Milk Spilled"],
+                    answer: "Duchess Silent"
+                },
+                {
+                    prompt: "Why does the Pocket-Watch keep stopping?",
+                    runs: [
+                        "Run 1: Wind Key, Butter applied, Tea spilled -> Watch Stops",
+                        "Run 2: Wind Key, Butter applied, No Tea -> Watch Stops",
+                        "Run 3: Wind Key, No Butter, No Tea -> Watch Runs"
+                    ],
+                    options: ["Wind Key", "Butter applied", "Tea spilled", "No Tea"],
+                    answer: "Butter applied"
+                }
+            ],
+            syllogism: [
+                {
+                    premises: ["1. All Borogoves are mimsy creatures.", "2. No mimsy creatures are fierce."],
+                    options: ["All Borogoves are fierce.", "No Borogoves are fierce.", "Some mimsy creatures are Borogoves."],
+                    answer: "No Borogoves are fierce."
+                },
+                {
+                    premises: ["1. All slithy toves gyre and gumble.", "2. Everything that gyres and gumbles makes a racket."],
+                    options: ["All slithy toves make a racket.", "No slithy toves make a racket.", "Some rackets are slithy."],
+                    answer: "All slithy toves make a racket."
+                }
+            ],
+            fallacy: [
+                {
+                    quote: "Either you drink tea with us right this second, or you hate friendship altogether!",
+                    options: ["Ad Hominem", "False Dilemma", "Straw Man", "Appeal to Authority"],
+                    answer: "False Dilemma"
+                },
+                {
+                    quote: "You claim my soup has too much pepper? Well, you are just an uneducated child who doesn't know fine culinary arts!",
+                    options: ["Ad Hominem", "Appeal to Ignorance", "Red Herring", "False Dilemma"],
+                    answer: "Ad Hominem"
+                }
+            ]
+        };
+
+        let activeGames = {};
+        let selectedCardEl = null;
+
+        window.onload = () => {
+            activeGames.taxonomy = db.taxonomy[Math.floor(Math.random() * db.taxonomy.length)];
+            activeGames.causality = db.causality[Math.floor(Math.random() * db.causality.length)];
+            activeGames.syllogism = db.syllogism[Math.floor(Math.random() * db.syllogism.length)];
+            activeGames.fallacy = db.fallacy[Math.floor(Math.random() * db.fallacy.length)];
+
+            renderTaxonomy();
+            renderCausality();
+            renderSyllogism();
+            renderFallacy();
+        };
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('content-' + tabId).classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
+        }
+
+        // --- MOBILE TAP & DESKTOP DRAG HANDLERS ---
+        function handleCardTap(ev, cardId) {
+            ev.stopPropagation();
+            const card = document.getElementById(cardId);
+            
+            if (selectedCardEl === card) {
+                card.classList.remove('selected-card');
+                selectedCardEl = null;
+            } else {
+                if (selectedCardEl) selectedCardEl.classList.remove('selected-card');
+                selectedCardEl = card;
+                selectedCardEl.classList.add('selected-card');
+            }
+        }
+
+        function handleContainerTap(ev, containerId) {
+            if (selectedCardEl) {
+                const targetContainer = document.getElementById(containerId);
+                targetContainer.appendChild(selectedCardEl);
+                selectedCardEl.classList.remove('selected-card');
+                selectedCardEl = null;
+            }
+        }
+
+        function renderTaxonomy() {
+            const game = activeGames.taxonomy;
+            document.getElementById('tax-prompt').innerText = game.prompt;
+            
+            const cardHtml = game.cards.map(c => `
+                <div id="${c.id}" data-type="${c.type}" draggable="true" ondragstart="drag(event)" onclick="handleCardTap(event, '${c.id}')" class="p-3 bg-white border border-borderSepia rounded cursor-pointer shadow-sm flex justify-between items-center text-sm sm:text-base">
+                    <span class="pointer-events-none">${c.text}</span>
+                </div>
+            `).join('');
+            document.getElementById('tax-cards').innerHTML = cardHtml;
+
+            const bucketHtml = game.buckets.map(b => `
+                <div id="bucket-${b.id}" data-target="${b.id}" class="dropzone border-2 border-dashed border-borderSepia rounded-lg p-3 sm:p-4 min-h-[100px] sm:min-h-[120px] flex flex-col items-center justify-start bg-parchment/30 active:bg-burgundy/5" onclick="handleContainerTap(event, 'bucket-${b.id}')" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                    <div class="text-center pointer-events-none mb-2">
+                        <span class="font-display font-bold text-burgundy text-xs sm:text-sm block">${b.icon} ${b.name}</span>
+                        <span class="font-sans text-[9px] sm:text-[10px] text-ink-muted uppercase tracking-wider block">${b.desc}</span>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('tax-buckets').innerHTML = bucketHtml;
+        }
+
+        function allowDrop(ev) { ev.preventDefault(); }
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); setTimeout(() => ev.target.classList.add('dragging'), 0); }
+        function dragEnter(ev) { ev.preventDefault(); if (ev.target.classList.contains('dropzone')) ev.target.classList.add('drag-over'); }
+        function dragLeave(ev) { if (ev.target.classList.contains('dropzone')) ev.target.classList.remove('drag-over'); }
+        function drop(ev) {
+            ev.preventDefault();
+            const id = ev.dataTransfer.getData("text");
+            const el = document.getElementById(id);
+            if(el) {
+                el.classList.remove('dragging');
+                const dropzone = ev.target.closest('.dropzone');
+                if (dropzone) { dropzone.classList.remove('drag-over'); dropzone.appendChild(el); }
+            }
+        }
+
+        function checkTaxonomy() {
+            let correct = true;
+            if(document.querySelectorAll('#tax-cards > div').length > 0) correct = false;
+            document.querySelectorAll('#tax-buckets .dropzone').forEach(bucket => {
+                const targetType = bucket.getAttribute('data-target');
+                bucket.querySelectorAll('div[draggable]').forEach(card => {
+                    if(card.getAttribute('data-type') !== targetType) correct = false;
+                });
+            });
+            const res = document.getElementById('tax-result');
+            res.innerHTML = correct ? "<span class='text-green-700'>🟢 VALID DEDUCTION!</span>" : "<span class='text-burgundy'>🔴 INVALID LOGIC. Try again.</span>";
+        }
+
+        function renderCausality() {
+            const game = activeGames.causality;
+            document.getElementById('cause-prompt').innerText = game.prompt;
+            document.getElementById('cause-runs').innerHTML = game.runs.map(r => `<p class="border-b border-borderSepia last:border-0 py-1.5">${r}</p>`).join('');
+            document.getElementById('cause-options').innerHTML = game.options.map(opt => `
+                <button onclick="checkSelection('cause-result', '${opt}', '${game.answer}')" class="p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans font-semibold text-xs sm:text-sm">${opt}</button>
+            `).join('');
+        }
+
+        function renderSyllogism() {
+            const game = activeGames.syllogism;
+            document.getElementById('syl-premises').innerHTML = game.premises.map(p => `<p class="mb-1 last:mb-0">${p}</p>`).join('');
+            document.getElementById('syl-options').innerHTML = game.options.map(opt => `
+                <button onclick="checkSelection('syl-result', '${opt}', '${game.answer}')" class="text-left p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans">${opt}</button>
+            `).join('');
+        }
+
+        function renderFallacy() {
+            const game = activeGames.fallacy;
+            document.getElementById('fal-quote').innerText = `"${game.quote}"`;
+            document.getElementById('fal-options').innerHTML = game.options.map(opt => `
+                <button onclick="checkSelection('fal-result', '${opt}', '${game.answer}')" class="p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans font-semibold">${opt}</button>
+            `).join('');
+        }
+
+        function checkSelection(resultElementId, selectedOption, correctOption) {
+            const res = document.getElementById(resultElementId);
+            if (selectedOption === correctOption) {
+                res.innerHTML = "<span class='text-green-700'>🟢 FLAWLESS LOGIC!</span>";
+            } else {
+                res.innerHTML = "<span class='text-burgundy'>🔴 FALLACY DETECTED. Try again.</span>";
+            }
+        }
+    </script>
+</body>
+</html>
