@@ -39,34 +39,136 @@
         .tab-btn.active { border-bottom-color: #7A1C1C; color: #7A1C1C; background-color: #FFFDF7; font-weight: bold; }
     </style>
 </head>
-<body class="bg-parchment text-ink font-body min-h-screen flex flex-col items-center p-3 sm:p-4 antialiased">
+<body class="bg-parchment text-ink font-body min-h-screen flex flex-col items-center p-2 sm:p-4 antialiased">
 
     <!-- Header -->
-    <header class="w-full max-w-2xl text-center border-b-2 border-burgundy pb-3 mt-2 sm:mt-4">
-        <h1 class="font-display text-3xl sm:text-5xl font-bold tracking-wider text-burgundy">LOGOS DAILY</h1>
-        <p class="font-body italic text-ink-muted text-sm sm:text-lg mt-0.5">"Curiouser & Curiouser Logic for Sharp Minds"</p>
+    <header class="w-full max-w-2xl text-center border-b-2 border-burgundy pb-3 mt-1 sm:mt-4">
+        <h1 class="font-display text-2xl sm:text-5xl font-bold tracking-wider text-burgundy">LOGOS DAILY</h1>
+        <p class="font-body italic text-ink-muted text-xs sm:text-lg mt-0.5">"Curiouser & Curiouser Logic for Sharp Minds"</p>
     </header>
 
-    <!-- Navigation Tabs -->
-    <nav class="w-full max-w-2xl mt-4 mb-2">
-        <div class="grid grid-cols-4 gap-1 sm:gap-2 text-center font-display text-[11px] sm:text-sm">
-            <button onclick="switchTab('taxonomy')" id="tab-taxonomy" class="tab-btn active py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🐛 Taxonomy</button>
-            <button onclick="switchTab('causality')" id="tab-causality" class="tab-btn py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🍵 Causality</button>
-            <button onclick="switchTab('syllogism')" id="tab-syllogism" class="tab-btn py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🃏 Syllogism</button>
+    <!-- Navigation Tabs (Responsive multi-row for mobile) -->
+    <nav class="w-full max-w-2xl mt-3 mb-3">
+        <div class="grid grid-cols-4 sm:grid-cols-7 gap-1 text-center font-display text-[10px] sm:text-xs">
+            <button onclick="switchTab('syllogism')" id="tab-syllogism" class="tab-btn active py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🃏 Syllogism</button>
             <button onclick="switchTab('fallacy')" id="tab-fallacy" class="tab-btn py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🎩 Fallacy</button>
+            <button onclick="switchTab('knights')" id="tab-knights" class="tab-btn py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">⚔️ Knights</button>
+            <button onclick="switchTab('river')" id="tab-river" class="tab-btn py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🌊 River</button>
+            <button onclick="switchTab('einstein')" id="tab-einstein" class="tab-btn py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🏠 Einstein</button>
+            <button onclick="switchTab('causality')" id="tab-causality" class="tab-btn py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🍵 Causality</button>
+            <button onclick="switchTab('taxonomy')" id="tab-taxonomy" class="tab-btn py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🐛 Taxonomy</button>
         </div>
     </nav>
 
     <!-- Main Game Board -->
     <main class="w-full max-w-2xl bg-parchment-card border border-borderSepia rounded-lg shadow-md p-4 sm:p-6 relative">
         
-        <!-- GAME 1: TAXONOMY -->
-        <div id="content-taxonomy" class="tab-content active">
+        <!-- GAME 1: SYLLOGISM (DEFAULT) -->
+        <div id="content-syllogism" class="tab-content active">
             <div class="text-center mb-4 sm:mb-6">
-                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game I: Aristotle's Topics</span>
+                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game I: Formal Logic</span>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Jabberwocky Chain</h2>
+                <p class="text-ink-muted italic text-xs sm:text-sm mt-1">Identify the valid conclusion that logically follows from the premises.</p>
+            </div>
+            <div class="bg-parchment border border-borderSepia rounded p-3 sm:p-4 mb-4 text-sm sm:text-base font-bold text-ink" id="syl-premises"></div>
+            <div class="grid gap-2 sm:gap-3 mb-6 text-xs sm:text-sm" id="syl-options"></div>
+            <div id="syl-result" class="mt-4 text-center font-display text-base sm:text-lg font-bold"></div>
+        </div>
+
+        <!-- GAME 2: FALLACY -->
+        <div id="content-fallacy" class="tab-content">
+            <div class="text-center mb-4 sm:mb-6">
+                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game II: Informal Logic</span>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Mad Hatter's Debate</h2>
+                <p class="text-ink-muted italic text-xs sm:text-sm mt-1">Identify the logical fallacy committed in the quote below.</p>
+            </div>
+            <div class="bg-parchment border border-borderSepia rounded p-3 sm:p-4 mb-4 text-sm sm:text-base italic text-center font-bold text-burgundy" id="fal-quote"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6 text-xs sm:text-sm" id="fal-options"></div>
+            <div id="fal-result" class="mt-4 text-center font-display text-base sm:text-lg font-bold"></div>
+        </div>
+
+        <!-- GAME 3: KNIGHTS & KNAVES -->
+        <div id="content-knights" class="tab-content">
+            <div class="text-center mb-4 sm:mb-6">
+                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game III: Truth & Deception</span>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">Tweedledee & Tweedledum</h2>
+                <p class="text-ink-muted italic text-xs sm:text-sm mt-1">Knights always tell the truth. Knaves always lie. Determine who is who!</p>
+            </div>
+            <div class="bg-parchment border border-borderSepia rounded p-3 sm:p-4 mb-4 text-xs sm:text-sm font-body" id="knights-prompt"></div>
+            <div class="grid gap-2 mb-6 text-xs sm:text-sm" id="knights-options"></div>
+            <div id="knights-result" class="mt-4 text-center font-display text-base sm:text-lg font-bold"></div>
+        </div>
+
+        <!-- GAME 4: RIVER CROSSING -->
+        <div id="content-river" class="tab-content">
+            <div class="text-center mb-4">
+                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game IV: Constraint Logic</span>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Looking-Glass River</h2>
+                <p class="text-ink-muted italic text-xs sm:text-sm mt-1">Transport 3 Flamingos (🦩) and 3 Hedgehogs (🦔) across. Boat holds max 2. If Hedgehogs outnumber Flamingos on either bank, they eat them!</p>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-2 bg-parchment border border-borderSepia p-3 rounded-lg text-center min-h-[140px] items-center text-xs sm:text-sm mb-4">
+                <div class="p-2 border border-borderSepia/60 rounded bg-white" id="river-left">
+                    <span class="font-bold text-burgundy block text-xs">LEFT BANK</span>
+                    <div id="river-left-items" class="text-lg my-1"></div>
+                    <button onclick="boardBoat('left')" id="btn-board-left" class="mt-1 bg-parchment px-2 py-1 border border-borderSepia rounded text-[10px] hover:bg-gold/10 active:bg-gold/20">Board Boat ⛵</button>
+                </div>
+                <div class="p-2 border border-blue-200 rounded bg-blue-50/50 flex flex-col justify-between h-full">
+                    <span class="font-bold text-blue-800 text-[11px]" id="river-boat-status">BOAT (LEFT)</span>
+                    <div id="river-boat-items" class="text-lg my-1"></div>
+                    <button onclick="crossRiver()" class="bg-burgundy text-white px-2 py-1 rounded text-[10px] font-bold shadow hover:bg-burgundy/90">CROSS 🌊</button>
+                </div>
+                <div class="p-2 border border-borderSepia/60 rounded bg-white" id="river-right">
+                    <span class="font-bold text-burgundy block text-xs">RIGHT BANK</span>
+                    <div id="river-right-items" class="text-lg my-1"></div>
+                    <button onclick="boardBoat('right')" id="btn-board-right" class="mt-1 bg-parchment px-2 py-1 border border-borderSepia rounded text-[10px] hover:bg-gold/10 active:bg-gold/20">Board Boat ⛵</button>
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <button onclick="resetRiver()" class="text-xs text-ink-muted underline font-sans">🔄 Restart River Crossing</button>
+                <div id="river-result" class="font-display font-bold text-sm sm:text-base"></div>
+            </div>
+        </div>
+
+        <!-- GAME 5: EINSTEIN'S GRID -->
+        <div id="content-einstein" class="tab-content">
+            <div class="text-center mb-3">
+                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game V: Grid Deduction</span>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Cheshire Row</h2>
+                <p class="text-ink-muted italic text-xs sm:text-sm mt-1">Read the clues and assign the correct traits to each house!</p>
+            </div>
+
+            <!-- Clues -->
+            <div class="bg-parchment border border-borderSepia rounded p-3 mb-4 text-xs sm:text-sm" id="einstein-clues"></div>
+
+            <!-- Interactive Grid -->
+            <div class="grid grid-cols-3 gap-2 mb-4 text-xs" id="einstein-grid"></div>
+
+            <div class="flex justify-center">
+                <button onclick="checkEinstein()" class="bg-burgundy text-parchment font-display font-bold px-5 py-2.5 rounded-full shadow hover:-translate-y-0.5 transition w-full sm:w-auto text-xs sm:text-sm active:bg-burgundy/90">✒️ STAMP DEDUCTION</button>
+            </div>
+            <div id="einstein-result" class="mt-3 text-center font-display text-base sm:text-lg font-bold"></div>
+        </div>
+
+        <!-- GAME 6: CAUSALITY -->
+        <div id="content-causality" class="tab-content">
+            <div class="text-center mb-4 sm:mb-6">
+                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game VI: Mill's Methods</span>
+                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Duchess's Kitchen</h2>
+                <p class="text-ink-muted italic text-xs sm:text-sm mt-1" id="cause-prompt"></p>
+            </div>
+            <div class="bg-parchment border border-borderSepia rounded p-3 sm:p-4 mb-4 text-xs sm:text-sm" id="cause-runs"></div>
+            <div class="grid grid-cols-2 gap-2 mb-6 text-xs sm:text-sm" id="cause-options"></div>
+            <div id="cause-result" class="mt-4 text-center font-display text-base sm:text-lg font-bold"></div>
+        </div>
+
+        <!-- GAME 7: TAXONOMY -->
+        <div id="content-taxonomy" class="tab-content">
+            <div class="text-center mb-4 sm:mb-6">
+                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game VII: Aristotle's Topics</span>
                 <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Caterpillar's Taxonomy</h2>
-                <p class="text-ink-muted italic text-sm sm:text-base mt-1" id="tax-prompt"></p>
-                <p class="font-sans text-[11px] text-gold font-semibold mt-1">💡 Tip: Tap a card to select it, then tap a bucket to place it!</p>
+                <p class="text-ink-muted italic text-xs sm:text-sm mt-1" id="tax-prompt"></p>
+                <p class="font-sans text-[10px] sm:text-xs text-gold font-semibold mt-1">💡 Tip: Tap a card to select it, then tap a bucket to place it!</p>
             </div>
             
             <div class="mb-4 sm:mb-6 p-3 border-2 border-dashed border-borderSepia/60 min-h-[90px] rounded dropzone" id="queue" onclick="handleContainerTap(event, 'queue')" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -76,236 +178,118 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6" id="tax-buckets"></div>
             
             <div class="flex justify-center">
-                <button onclick="checkTaxonomy()" class="bg-burgundy text-parchment font-display font-bold px-6 py-3 rounded-full shadow-lg hover:-translate-y-0.5 transition w-full sm:w-auto text-sm sm:text-base active:bg-burgundy/90">✒️ STAMP DEDUCTION</button>
+                <button onclick="checkTaxonomy()" class="bg-burgundy text-parchment font-display font-bold px-6 py-3 rounded-full shadow hover:-translate-y-0.5 transition w-full sm:w-auto text-xs sm:text-sm active:bg-burgundy/90">✒️ STAMP DEDUCTION</button>
             </div>
-            <div id="tax-result" class="mt-4 text-center font-display text-lg sm:text-xl font-bold"></div>
-        </div>
-
-        <!-- GAME 2: CAUSALITY -->
-        <div id="content-causality" class="tab-content">
-            <div class="text-center mb-4 sm:mb-6">
-                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game II: Mill's Methods</span>
-                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Duchess's Kitchen</h2>
-                <p class="text-ink-muted italic text-sm sm:text-base mt-1" id="cause-prompt"></p>
-            </div>
-            <div class="bg-parchment border border-borderSepia rounded p-3 sm:p-4 mb-4 text-xs sm:text-sm" id="cause-runs"></div>
-            <div class="grid grid-cols-2 gap-2 mb-6" id="cause-options"></div>
-            <div id="cause-result" class="mt-4 text-center font-display text-lg sm:text-xl font-bold"></div>
-        </div>
-
-        <!-- GAME 3: SYLLOGISM -->
-        <div id="content-syllogism" class="tab-content">
-            <div class="text-center mb-4 sm:mb-6">
-                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game III: Formal Logic</span>
-                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Jabberwocky Chain</h2>
-                <p class="text-ink-muted italic text-sm sm:text-base mt-1">Identify the valid conclusion from the premises below.</p>
-            </div>
-            <div class="bg-parchment border border-borderSepia rounded p-3 sm:p-4 mb-4 text-sm sm:text-lg font-bold" id="syl-premises"></div>
-            <div class="grid gap-2 sm:gap-3 mb-6 text-sm sm:text-base" id="syl-options"></div>
-            <div id="syl-result" class="mt-4 text-center font-display text-lg sm:text-xl font-bold"></div>
-        </div>
-
-        <!-- GAME 4: FALLACY -->
-        <div id="content-fallacy" class="tab-content">
-            <div class="text-center mb-4 sm:mb-6">
-                <span class="font-sans text-[10px] sm:text-xs uppercase tracking-widest text-gold font-semibold">Game IV: Informal Logic</span>
-                <h2 class="font-display text-xl sm:text-2xl font-bold text-ink mt-0.5">The Mad Hatter's Debate</h2>
-                <p class="text-ink-muted italic text-sm sm:text-base mt-1">Identify the logical fallacy committed in the quote below.</p>
-            </div>
-            <div class="bg-parchment border border-borderSepia rounded p-3 sm:p-4 mb-4 text-sm sm:text-lg italic text-center font-bold text-burgundy" id="fal-quote"></div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6 text-sm sm:text-base" id="fal-options"></div>
-            <div id="fal-result" class="mt-4 text-center font-display text-lg sm:text-xl font-bold"></div>
+            <div id="tax-result" class="mt-4 text-center font-display text-base sm:text-lg font-bold"></div>
         </div>
 
     </main>
 
     <script>
-        // Expanded Database of Questions
+        // EXPANDED QUESTION BANK (10+ Items per Category)
         const db = {
-            taxonomy: [
+            syllogism: [
+                { premises: ["1. All Borogoves are mimsy creatures.", "2. No mimsy creatures are fierce."], options: ["All Borogoves are fierce.", "No Borogoves are fierce.", "Some mimsy creatures are Borogoves.", "All fierce things are mimsy."], answer: "No Borogoves are fierce." },
+                { premises: ["1. All slithy toves gyre and gumble.", "2. Everything that gyres and gumbles makes a racket."], options: ["All slithy toves make a racket.", "No slithy toves make a racket.", "Some rackets are slithy.", "Gyring is always silent."], answer: "All slithy toves make a racket." },
+                { premises: ["1. All Bread-and-Butterflies have wings of bread.", "2. Some creatures with wings of bread dissolve in tea."], options: ["All Bread-and-Butterflies dissolve in tea.", "No Bread-and-Butterflies dissolve in tea.", "Some Bread-and-Butterflies may dissolve in tea.", "All tea dissolves wings."], answer: "Some Bread-and-Butterflies may dissolve in tea." },
+                { premises: ["1. If it is 6:00 PM, the Hatter is at tea.", "2. The Hatter is not at tea."], options: ["It is 6:00 PM.", "It is not 6:00 PM.", "The Hatter is asleep.", "Tea is finished."], answer: "It is not 6:00 PM." },
+                { premises: ["1. No playing cards can withstand the wind.", "2. The Queen of Hearts is a playing card."], options: ["The Queen of Hearts causes wind.", "The Queen can withstand the wind.", "The Queen cannot withstand the wind.", "All winds are playing cards."], answer: "The Queen cannot withstand the wind." },
+                { premises: ["1. All Cheshire Cats possess floating grins.", "2. All creatures with floating grins can vanish."], options: ["All Cheshire Cats can vanish.", "No Cheshire Cats vanish.", "All vanishing things are cats.", "Some grins cannot float."], answer: "All Cheshire Cats can vanish." },
+                { premises: ["1. Some Jabberwocks have eyes of flame.", "2. All creatures with eyes of flame dwell in the Tulgey Wood."], options: ["All Jabberwocks dwell in the Tulgey Wood.", "Some Jabberwocks dwell in the Tulgey Wood.", "No Jabberwocks dwell in the Wood.", "The Wood is entirely on fire."], answer: "Some Jabberwocks dwell in the Tulgey Wood." },
+                { premises: ["1. No White Rabbits are ever on time.", "2. Everyone carrying a pocket-watch is on time."], options: ["No White Rabbits carry pocket-watches.", "All White Rabbits carry pocket-watches.", "Some White Rabbits are on time.", "Pocket-watches make rabbits slow."], answer: "No White Rabbits carry pocket-watches." },
+                { premises: ["1. All royal tarts are baked by the Knave.", "2. Some baked tarts are strawberry."], options: ["All strawberry tarts are baked by the Knave.", "Some royal tarts may be strawberry.", "No tarts are strawberry.", "The Knave hates strawberries."], answer: "Some royal tarts may be strawberry." },
+                { premises: ["1. If Alice eats the cake, she grows taller.", "2. Alice eats the cake."], options: ["Alice grows taller.", "Alice shrinks smaller.", "The cake turns to dust.", "Alice remains unchanged."], answer: "Alice grows taller." }
+            ],
+            fallacy: [
+                { quote: "Either you drink tea with us right this second, or you hate friendship altogether!", options: ["Ad Hominem", "False Dilemma", "Straw Man", "Appeal to Authority"], answer: "False Dilemma" },
+                { quote: "You claim my soup has too much pepper? Well, you are just an uneducated child who knows nothing of fine cooking!", options: ["Ad Hominem", "Appeal to Ignorance", "Red Herring", "False Dilemma"], answer: "Ad Hominem" },
+                { quote: "The Queen said the sky is green, and as sovereign ruler, her word is supreme, so the sky must be green!", options: ["Appeal to Authority", "Slippery Slope", "Hasty Generalization", "Circular Reasoning"], answer: "Appeal to Authority" },
+                { quote: "Alice: 'What time is it?' Hatter: 'Why is a raven like a writing desk?'", options: ["Ad Hominem", "False Cause", "Red Herring", "Appeal to Emotion"], answer: "Red Herring" },
+                { quote: "If we don't behead the Knave for stealing tarts today, tomorrow he will steal the crown, and the kingdom will fall!", options: ["Slippery Slope", "Straw Man", "Bandwagon", "False Dilemma"], answer: "Slippery Slope" },
+                { quote: "My assertions are indisputably true because I never state anything false!", options: ["Circular Reasoning", "Ad Hominem", "Appeal to Ignorance", "Red Herring"], answer: "Circular Reasoning" },
+                { quote: "Everyone in Wonderland believes six impossible things before breakfast, so you ought to believe them too!", options: ["Bandwagon Fallacy", "Straw Man", "Equivocation", "False Dilemma"], answer: "Bandwagon Fallacy" },
+                { quote: "You say we should observe rules of etiquette, but you haven't even combed your hair today!", options: ["Tu Quoque (Ad Hominem)", "Slippery Slope", "Appeal to Fear", "Red Herring"], answer: "Tu Quoque (Ad Hominem)" },
+                { quote: "Nobody has ever proven that the Snark is NOT a Boojum, therefore it must be a Boojum!", options: ["Appeal to Ignorance", "False Cause", "Equivocation", "Straw Man"], answer: "Appeal to Ignorance" },
+                { quote: "You want us to hold tea-time at 5:00 instead of 6:00? Why do you want to destroy all our beloved traditions?!", options: ["Straw Man", "Circular Reasoning", "Ad Hominem", "Bandwagon"], answer: "Straw Man" }
+            ],
+            knights: [
+                { prompt: "Tweedledee says: 'At least one of us is a Knave.' What are Tweedledee and Tweedledum?", options: ["Dee is Knight, Dum is Knave", "Both are Knaves", "Dee is Knave, Dum is Knight", "Both are Knights"], answer: "Dee is Knight, Dum is Knave" },
+                { prompt: "Tweedledee says: 'We are both Knaves.' What are Tweedledee and Tweedledum?", options: ["Dee is Knave, Dum is Knight", "Both are Knaves", "Both are Knights", "Dee is Knight, Dum is Knave"], answer: "Dee is Knave, Dum is Knight" },
+                { prompt: "Tweedledee says: 'I am a Knave, or Tweedledum is a Knight.' What are they?", options: ["Both are Knights", "Both are Knaves", "Dee is Knave, Dum is Knight", "Dee is Knight, Dum is Knave"], answer: "Both are Knights" },
+                { prompt: "Tweedledee says 'Tweedledum and I are of the same type (both Knights or both Knaves).' What is Tweedledum?", options: ["Knight", "Knave", "Cannot be determined", "Neither"], answer: "Knight" },
+                { prompt: "Tweedledee says: 'Tweedledum is a Knave.' Tweedledum says: 'Dee and I are opposite types.' What are they?", options: ["Dee is Knight, Dum is Knave", "Dee is Knave, Dum is Knight", "Both are Knaves", "Both are Knights"], answer: "Dee is Knight, Dum is Knave" }
+            ],
+            einstein: [
                 {
-                    prompt: "Sort the observations regarding a Vorpal Sword and a Snark.",
-                    cards: [
-                        { id: "t1", text: "A Vorpal Sword is a blade that goes snicker-snack.", type: "definition" },
-                        { id: "t2", text: "A Snark is far harder to catch than a Sword.", type: "degree" }
-                    ],
-                    buckets: [
-                        { id: "definition", icon: "✒️", name: "DEFINITION", desc: "Essence & Genus" },
-                        { id: "degree", icon: "⚖️", name: "DEGREE", desc: "Greater / Lesser" }
+                    clues: ["1. The Tea drinker lives in House #2.", "2. The Cat owner lives in the Red house.", "3. House #1 is Green.", "4. The Rabbit lives in the Blue house.", "5. The Milk drinker lives in the Green house."],
+                    solution: [
+                        { color: "Green", drink: "Milk", pet: "Dormouse" },
+                        { color: "Red", drink: "Tea", pet: "Cat" },
+                        { color: "Blue", drink: "Water", pet: "Rabbit" }
                     ]
                 },
                 {
-                    prompt: "Sort the observations regarding a Flamingo Mallet and a Hedgehog Ball.",
-                    cards: [
-                        { id: "t3", text: "Striking the Hedgehog too firmly causes it to walk away.", type: "cause" },
-                        { id: "t4", text: "The opposite of an uncooperative Hedgehog is a Stone Sphere.", type: "opposition" }
-                    ],
-                    buckets: [
-                        { id: "cause", icon: "⚡", name: "CAUSE & EFFECT", desc: "Origins / Results" },
-                        { id: "opposition", icon: "☯️", name: "OPPOSITION", desc: "Contraries" }
-                    ]
-                },
-                {
-                    prompt: "Sort the observations regarding the mysterious Cake and Potion.",
-                    cards: [
-                        { id: "t5", text: "The Cake expands one's physical form by a factor of ten.", type: "property" },
-                        { id: "t6", text: "The 'Drink Me' Potion is a liquid mixture, whilst the Cake is a baked solid.", type: "difference" }
-                    ],
-                    buckets: [
-                        { id: "property", icon: "✨", name: "PROPERTY", desc: "Characteristics" },
-                        { id: "difference", icon: "🔍", name: "DIFFERENCE", desc: "Distinctions" }
-                    ]
-                },
-                {
-                    prompt: "Sort the observations regarding the March Hare and the Mad Hatter.",
-                    cards: [
-                        { id: "t7", text: "The Hatter and the Hare share an endless state of Tea-Time.", type: "similarity" },
-                        { id: "t8", text: "Because the Hatter offended Time, the clocks are forever stuck at 6:00.", type: "cause" }
-                    ],
-                    buckets: [
-                        { id: "cause", icon: "⚡", name: "CAUSE & EFFECT", desc: "Origins / Results" },
-                        { id: "similarity", icon: "👯", name: "SIMILARITY", desc: "Shared Traits" }
-                    ]
-                },
-                {
-                    prompt: "Sort the observations regarding the Queen's Roses.",
-                    cards: [
-                        { id: "t9", text: "White roses are entirely lacking in the Queen's favored crimson hue.", type: "privation" },
-                        { id: "t10", text: "A painted rose is merely a deception hiding a natural flower.", type: "definition" }
-                    ],
-                    buckets: [
-                        { id: "definition", icon: "✒️", name: "DEFINITION", desc: "Essence & Genus" },
-                        { id: "privation", icon: "🥀", name: "PRIVATION", desc: "Absence of Quality" }
+                    clues: ["1. The Dormouse owner drinks Water.", "2. House #3 is Red.", "3. The Tea drinker lives in the Blue house.", "4. House #1 is Green.", "5. The Cat owner lives in the Green house."],
+                    solution: [
+                        { color: "Green", drink: "Milk", pet: "Cat" },
+                        { color: "Blue", drink: "Tea", pet: "Rabbit" },
+                        { color: "Red", drink: "Water", pet: "Dormouse" }
                     ]
                 }
             ],
             causality: [
-                {
-                    prompt: "Why does the Cheshire Cat keep vanishing?",
-                    runs: [
-                        "Run 1: Pepper, Duchess Singing, Crown -> Cat Visible",
-                        "Run 2: Pepper, Duchess Silent, Crown -> Cat Vanishes",
-                        "Run 3: Milk Spilled, Duchess Silent, Crown -> Cat Vanishes"
-                    ],
-                    options: ["Pepper", "Duchess Silent", "Crown", "Milk Spilled"],
-                    answer: "Duchess Silent"
-                },
-                {
-                    prompt: "Why does the Pocket-Watch keep stopping?",
-                    runs: [
-                        "Run 1: Wind Key, Butter applied, Tea spilled -> Watch Stops",
-                        "Run 2: Wind Key, Butter applied, No Tea -> Watch Stops",
-                        "Run 3: Wind Key, No Butter, No Tea -> Watch Runs"
-                    ],
-                    options: ["Wind Key", "Butter applied", "Tea spilled", "No Tea"],
-                    answer: "Butter applied"
-                },
-                {
-                    prompt: "Why does the Dormouse suddenly wake up?",
-                    runs: [
-                        "Run 1: Hot Tea, Loud Singing, Hatter's Hat -> Remains Asleep",
-                        "Run 2: No Tea, Loud Singing, Hatter's Hat -> Remains Asleep",
-                        "Run 3: Hot Tea, Pinched Nose, Hatter's Hat -> Wakes Up"
-                    ],
-                    options: ["Hot Tea", "Loud Singing", "Hatter's Hat", "Pinched Nose"],
-                    answer: "Pinched Nose"
-                },
-                {
-                    prompt: "Why do the White Roses keep turning Red?",
-                    runs: [
-                        "Run 1: Sunshine, Cards Painting, Queen Yelling -> Roses Turn Red",
-                        "Run 2: Rain, Cards Painting, Queen Silent -> Roses Turn Red",
-                        "Run 3: Sunshine, Cards Sleeping, Queen Yelling -> Roses Stay White"
-                    ],
-                    options: ["Sunshine", "Cards Painting", "Queen Yelling", "Rain"],
-                    answer: "Cards Painting"
-                },
-                {
-                    prompt: "Why does the baby transform into a pig?",
-                    runs: [
-                        "Run 1: Rocking, Pepper in Air, Duchess Sneezing -> Turns to Pig",
-                        "Run 2: Rocking, No Pepper, Duchess Sneezing -> Stays a Baby",
-                        "Run 3: No Rocking, Pepper in Air, No Sneezing -> Turns to Pig"
-                    ],
-                    options: ["Rocking", "Pepper in Air", "Duchess Sneezing", "No Rocking"],
-                    answer: "Pepper in Air"
-                }
+                { prompt: "Why does the Cheshire Cat keep vanishing?", runs: ["Run 1: Pepper, Duchess Singing, Crown -> Cat Visible", "Run 2: Pepper, Duchess Silent, Crown -> Cat Vanishes", "Run 3: Milk Spilled, Duchess Silent, Crown -> Cat Vanishes"], options: ["Pepper", "Duchess Silent", "Crown", "Milk Spilled"], answer: "Duchess Silent" },
+                { prompt: "Why does the Pocket-Watch keep stopping?", runs: ["Run 1: Wind Key, Butter applied, Tea spilled -> Watch Stops", "Run 2: Wind Key, Butter applied, No Tea -> Watch Stops", "Run 3: Wind Key, No Butter, No Tea -> Watch Runs"], options: ["Wind Key", "Butter applied", "Tea spilled", "No Tea"], answer: "Butter applied" },
+                { prompt: "Why does the Dormouse suddenly wake up?", runs: ["Run 1: Hot Tea, Loud Singing, Hatter's Hat -> Remains Asleep", "Run 2: No Tea, Loud Singing, Hatter's Hat -> Remains Asleep", "Run 3: Hot Tea, Pinched Nose, Hatter's Hat -> Wakes Up"], options: ["Hot Tea", "Loud Singing", "Hatter's Hat", "Pinched Nose"], answer: "Pinched Nose" },
+                { prompt: "Why do the White Roses keep turning Red?", runs: ["Run 1: Sunshine, Cards Painting, Queen Yelling -> Roses Turn Red", "Run 2: Rain, Cards Painting, Queen Silent -> Roses Turn Red", "Run 3: Sunshine, Cards Sleeping, Queen Yelling -> Roses Stay White"], options: ["Sunshine", "Cards Painting", "Queen Yelling", "Rain"], answer: "Cards Painting" },
+                { prompt: "Why does the baby transform into a pig?", runs: ["Run 1: Rocking, Pepper in Air, Duchess Sneezing -> Turns to Pig", "Run 2: Rocking, No Pepper, Duchess Sneezing -> Stays a Baby", "Run 3: No Rocking, Pepper in Air, No Sneezing -> Turns to Pig"], options: ["Rocking", "Pepper in Air", "Duchess Sneezing", "No Rocking"], answer: "Pepper in Air" },
+                { prompt: "Why does the Croquet Flamingo get unruly?", runs: ["Run 1: Crown worn, Worm spotted, Gentle grip -> Flamingo Unruly", "Run 2: Crown worn, No Worm, Firm grip -> Flamingo Calm", "Run 3: No Crown, Worm spotted, Firm grip -> Flamingo Unruly"], options: ["Crown worn", "Worm spotted", "Gentle grip", "Firm grip"], answer: "Worm spotted" },
+                { prompt: "Why did the Mock Turtle start weeping?", runs: ["Run 1: Lobster Quadrille, Soup Song, Sunset -> Weeping", "Run 2: Lobster Quadrille, No Song, Sunset -> Silent", "Run 3: No Quadrille, Soup Song, Sunrise -> Weeping"], options: ["Lobster Quadrille", "Soup Song", "Sunset", "Sunrise"], answer: "Soup Song" },
+                { prompt: "Why did the Queen order 'Off with his head!'?", runs: ["Run 1: Knave Smiling, Tarts Missing, Sun Shining -> Order Given", "Run 2: Knave Bowing, Tarts Missing, Rain Falling -> Order Given", "Run 3: Knave Smiling, Tarts Present, Sun Shining -> No Order"], options: ["Knave Smiling", "Tarts Missing", "Sun Shining", "Rain Falling"], answer: "Tarts Missing" },
+                { prompt: "Why does Alice grow gigantic?", runs: ["Run 1: Eat Cake, Blue Bottle, Golden Key -> Grows Gigantic", "Run 2: Eat Cake, Red Bottle, No Key -> Grows Gigantic", "Run 3: Drink Bottle, Red Bottle, Golden Key -> Shrinks Small"], options: ["Eat Cake", "Blue Bottle", "Golden Key", "Red Bottle"], answer: "Eat Cake" },
+                { prompt: "Why did the Mad Hatter's clock stop showing the date?", runs: ["Run 1: Crumbs in Works, Butter applied, Tea spilled -> Clock Stops", "Run 2: Crumbs in Works, No Butter, Clean Tea -> Clock Stops", "Run 3: Clean Works, No Butter, Clean Tea -> Clock Functions"], options: ["Crumbs in Works", "Butter applied", "Tea spilled", "Clean Tea"], answer: "Crumbs in Works" }
             ],
-            syllogism: [
-                {
-                    premises: ["1. All Borogoves are mimsy creatures.", "2. No mimsy creatures are fierce."],
-                    options: ["All Borogoves are fierce.", "No Borogoves are fierce.", "Some mimsy creatures are Borogoves.", "All fierce things are mimsy."],
-                    answer: "No Borogoves are fierce."
-                },
-                {
-                    premises: ["1. All slithy toves gyre and gumble.", "2. Everything that gyres and gumbles makes a racket."],
-                    options: ["All slithy toves make a racket.", "No slithy toves make a racket.", "Some rackets are slithy.", "Gyring is always silent."],
-                    answer: "All slithy toves make a racket."
-                },
-                {
-                    premises: ["1. All Bread-and-Butterflies have wings of thin slices of bread.", "2. Some creatures with wings of bread dissolve in tea."],
-                    options: ["All Bread-and-Butterflies dissolve in tea.", "No Bread-and-Butterflies dissolve in tea.", "Some Bread-and-Butterflies may dissolve in tea.", "All tea dissolves wings."],
-                    answer: "Some Bread-and-Butterflies may dissolve in tea."
-                },
-                {
-                    premises: ["1. If it is time for tea, the Hatter is sitting at the table.", "2. The Hatter is not sitting at the table."],
-                    options: ["It is time for tea.", "It is not time for tea.", "The March Hare is drinking.", "The table is empty."],
-                    answer: "It is not time for tea."
-                },
-                {
-                    premises: ["1. No playing cards can stand up to a strong wind.", "2. The Queen of Hearts is a playing card."],
-                    options: ["The Queen of Hearts causes wind.", "The Queen of Hearts can stand up to a strong wind.", "The Queen of Hearts cannot stand up to a strong wind.", "Some winds are playing cards."],
-                    answer: "The Queen of Hearts cannot stand up to a strong wind."
-                }
-            ],
-            fallacy: [
-                {
-                    quote: "Either you drink tea with us right this second, or you hate friendship altogether!",
-                    options: ["Ad Hominem", "False Dilemma", "Straw Man", "Appeal to Authority"],
-                    answer: "False Dilemma"
-                },
-                {
-                    quote: "You claim my soup has too much pepper? Well, you are just an uneducated child who doesn't know fine culinary arts!",
-                    options: ["Ad Hominem", "Appeal to Ignorance", "Red Herring", "False Dilemma"],
-                    answer: "Ad Hominem"
-                },
-                {
-                    quote: "The Queen of Hearts said the sky is green, and she is the absolute ruler, so the sky must be green!",
-                    options: ["Appeal to Authority", "Slippery Slope", "Hasty Generalization", "Circular Reasoning"],
-                    answer: "Appeal to Authority"
-                },
-                {
-                    quote: "Alice: 'What time is it?'\nHatter: 'Why is a raven like a writing desk?'",
-                    options: ["Ad Hominem", "False Cause", "Red Herring", "Appeal to Emotion"],
-                    answer: "Red Herring"
-                },
-                {
-                    quote: "If we don't behead the Knave for stealing the tarts, next he will steal the crown, and then the whole kingdom will collapse into absolute chaos!",
-                    options: ["Slippery Slope", "Straw Man", "Bandwagon", "False Dilemma"],
-                    answer: "Slippery Slope"
-                },
-                {
-                    quote: "I am perfectly correct, because I never make mistakes!",
-                    options: ["Circular Reasoning", "Ad Hominem", "Appeal to Ignorance", "Red Herring"],
-                    answer: "Circular Reasoning"
-                }
+            taxonomy: [
+                { prompt: "Sort the observations regarding a Vorpal Sword and a Snark.", cards: [{ id: "t1", text: "A Vorpal Sword is a blade that goes snicker-snack.", type: "definition" }, { id: "t2", text: "A Snark is far harder to catch than a Sword.", type: "degree" }], buckets: [{ id: "definition", icon: "✒️", name: "DEFINITION", desc: "Essence & Genus" }, { id: "degree", icon: "⚖️", name: "DEGREE", desc: "Greater / Lesser" }] },
+                { prompt: "Sort the observations regarding a Flamingo Mallet and a Hedgehog Ball.", cards: [{ id: "t3", text: "Striking the Hedgehog too firmly causes it to walk away.", type: "cause" }, { id: "t4", text: "The opposite of an uncooperative Hedgehog is a Stone Sphere.", type: "opposition" }], buckets: [{ id: "cause", icon: "⚡", name: "CAUSE & EFFECT", desc: "Origins / Results" }, { id: "opposition", icon: "☯️", name: "OPPOSITION", desc: "Contraries" }] },
+                { prompt: "Sort the observations regarding the mysterious Cake and Potion.", cards: [{ id: "t5", text: "The Cake expands one's physical form by a factor of ten.", type: "property" }, { id: "t6", text: "The 'Drink Me' Potion is a liquid, whilst the Cake is a baked solid.", type: "difference" }], buckets: [{ id: "property", icon: "✨", name: "PROPERTY", desc: "Characteristics" }, { id: "difference", icon: "🔍", name: "DIFFERENCE", desc: "Distinctions" }] },
+                { prompt: "Sort the observations regarding the March Hare and the Mad Hatter.", cards: [{ id: "t7", text: "The Hatter and the Hare share an endless state of Tea-Time.", type: "similarity" }, { id: "t8", text: "Because the Hatter offended Time, the clocks are forever stuck.", type: "cause" }], buckets: [{ id: "cause", icon: "⚡", name: "CAUSE & EFFECT", desc: "Origins / Results" }, { id: "similarity", icon: "👯", name: "SIMILARITY", desc: "Shared Traits" }] },
+                { prompt: "Sort the observations regarding the Queen's Roses.", cards: [{ id: "t9", text: "White roses are entirely lacking in the Queen's crimson hue.", type: "privation" }, { id: "t10", text: "A painted rose is merely a deception hiding a natural flower.", type: "definition" }], buckets: [{ id: "definition", icon: "✒️", name: "DEFINITION", desc: "Essence & Genus" }, { id: "privation", icon: "🥀", name: "PRIVATION", desc: "Absence of Quality" }] },
+                { prompt: "Sort the observations regarding the Jabberwock and the Bandersnatch.", cards: [{ id: "t11", text: "The Jabberwock possesses eyes of flame and claws that bite.", type: "definition" }, { id: "t12", text: "A Bandersnatch is vastly more frumious than a Jabberwock.", type: "degree" }], buckets: [{ id: "definition", icon: "✒️", name: "DEFINITION", desc: "Essence & Genus" }, { id: "degree", icon: "⚖️", name: "DEGREE", desc: "Greater / Lesser" }] },
+                { prompt: "Sort the observations regarding Tweedledee and Tweedledum.", cards: [{ id: "t13", text: "Tweedledee and Tweedledum mirror one another in speech and dress.", type: "similarity" }, { id: "t14", text: "A spoiled rattle causes them to agree to a battle.", type: "cause" }], buckets: [{ id: "cause", icon: "⚡", name: "CAUSE & EFFECT", desc: "Origins / Results" }, { id: "similarity", icon: "👯", name: "SIMILARITY", desc: "Shared Traits" }] },
+                { prompt: "Sort the observations regarding the Caterpillar's Hookah.", cards: [{ id: "t15", text: "The hookah produces scented blue smoke rings.", type: "property" }, { id: "t16", text: "Unlike a tea pipe, a hookah utilizes a water basin for filtration.", type: "difference" }], buckets: [{ id: "property", icon: "✨", name: "PROPERTY", desc: "Characteristics" }, { id: "difference", icon: "🔍", name: "DIFFERENCE", desc: "Distinctions" }] },
+                { prompt: "Sort the observations regarding the Cheshire Cat's Smile.", cards: [{ id: "t17", text: "A smile without a cat is the total absence of a physical body.", type: "privation" }, { id: "t18", text: "The smile is an expression of amusement.", type: "definition" }], buckets: [{ id: "definition", icon: "✒️", name: "DEFINITION", desc: "Essence & Genus" }, { id: "privation", icon: "🥀", name: "PRIVATION", desc: "Absence of Quality" }] },
+                { prompt: "Sort the observations regarding the White Rabbit's Gloves.", cards: [{ id: "t19", text: "Wearing white kid gloves signifies royal court attire.", type: "property" }, { id: "t20", text: "Dropping the gloves causes Alice to shrink when picked up.", type: "cause" }], buckets: [{ id: "cause", icon: "⚡", name: "CAUSE & EFFECT", desc: "Origins / Results" }, { id: "property", icon: "✨", name: "PROPERTY", desc: "Characteristics" }] }
             ]
         };
 
         let activeGames = {};
         let selectedCardEl = null;
 
+        // River crossing state
+        let riverState = {
+            left: { f: 3, h: 3 },
+            right: { f: 0, h: 0 },
+            boat: { f: 0, h: 0 },
+            boatPos: 'left',
+            gameOver: false
+        };
+
         window.onload = () => {
-            // Randomly select one prompt from the expanded arrays every time the page loads
-            activeGames.taxonomy = db.taxonomy[Math.floor(Math.random() * db.taxonomy.length)];
-            activeGames.causality = db.causality[Math.floor(Math.random() * db.causality.length)];
             activeGames.syllogism = db.syllogism[Math.floor(Math.random() * db.syllogism.length)];
             activeGames.fallacy = db.fallacy[Math.floor(Math.random() * db.fallacy.length)];
+            activeGames.knights = db.knights[Math.floor(Math.random() * db.knights.length)];
+            activeGames.einstein = db.einstein[Math.floor(Math.random() * db.einstein.length)];
+            activeGames.causality = db.causality[Math.floor(Math.random() * db.causality.length)];
+            activeGames.taxonomy = db.taxonomy[Math.floor(Math.random() * db.taxonomy.length)];
 
-            renderTaxonomy();
-            renderCausality();
             renderSyllogism();
             renderFallacy();
+            renderKnights();
+            renderRiver();
+            renderEinstein();
+            renderCausality();
+            renderTaxonomy();
         };
 
         function switchTab(tabId) {
@@ -315,10 +299,163 @@
             document.getElementById('tab-' + tabId).classList.add('active');
         }
 
+        // --- GAME 1: SYLLOGISM ---
+        function renderSyllogism() {
+            const game = activeGames.syllogism;
+            document.getElementById('syl-premises').innerHTML = game.premises.map(p => `<p class="mb-1 last:mb-0">${p}</p>`).join('');
+            const shuffledOptions = [...game.options].sort(() => Math.random() - 0.5);
+            document.getElementById('syl-options').innerHTML = shuffledOptions.map(opt => `
+                <button onclick="checkSelection('syl-result', '${opt.replace(/'/g, "\\'")}', '${game.answer.replace(/'/g, "\\'")}')" class="text-left p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans w-full">${opt}</button>
+            `).join('');
+        }
+
+        // --- GAME 2: FALLACY ---
+        function renderFallacy() {
+            const game = activeGames.fallacy;
+            document.getElementById('fal-quote').innerText = `"${game.quote}"`;
+            const shuffledOptions = [...game.options].sort(() => Math.random() - 0.5);
+            document.getElementById('fal-options').innerHTML = shuffledOptions.map(opt => `
+                <button onclick="checkSelection('fal-result', '${opt.replace(/'/g, "\\'")}', '${game.answer.replace(/'/g, "\\'")}')" class="p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans font-semibold text-center w-full">${opt}</button>
+            `).join('');
+        }
+
+        // --- GAME 3: KNIGHTS & KNAVES ---
+        function renderKnights() {
+            const game = activeGames.knights;
+            document.getElementById('knights-prompt').innerHTML = `<p class="font-bold text-burgundy mb-1">Scenario:</p><p class="italic text-base">"${game.prompt}"</p>`;
+            const shuffledOptions = [...game.options].sort(() => Math.random() - 0.5);
+            document.getElementById('knights-options').innerHTML = shuffledOptions.map(opt => `
+                <button onclick="checkSelection('knights-result', '${opt.replace(/'/g, "\\'")}', '${game.answer.replace(/'/g, "\\'")}')" class="text-left p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans font-semibold w-full">${opt}</button>
+            `).join('');
+        }
+
+        // --- GAME 4: RIVER CROSSING ---
+        function renderRiver() {
+            document.getElementById('river-left-items').innerHTML = '🦩'.repeat(riverState.left.f) + '🦔'.repeat(riverState.left.h);
+            document.getElementById('river-right-items').innerHTML = '🦩'.repeat(riverState.right.f) + '🦔'.repeat(riverState.right.h);
+            document.getElementById('river-boat-items').innerHTML = '🦩'.repeat(riverState.boat.f) + '🦔'.repeat(riverState.boat.h) || '<span class="text-xs text-ink-muted italic">Empty</span>';
+            document.getElementById('river-boat-status').innerText = `BOAT (${riverState.boatPos.toUpperCase()})`;
+        }
+
+        function boardBoat(bank) {
+            if (riverState.gameOver || riverState.boatPos !== bank) return;
+            // Cycle through board combinations: add Flamingo if available, else Hedgehog, else clear
+            const totalBoat = riverState.boat.f + riverState.boat.h;
+            if (totalBoat < 2) {
+                if (riverState[bank].f > 0) { riverState[bank].f--; riverState.boat.f++; }
+                else if (riverState[bank].h > 0) { riverState[bank].h--; riverState.boat.h++; }
+            } else {
+                // Empty boat back to current bank
+                riverState[bank].f += riverState.boat.f;
+                riverState[bank].h += riverState.boat.h;
+                riverState.boat.f = 0; riverState.boat.h = 0;
+            }
+            renderRiver();
+        }
+
+        function crossRiver() {
+            if (riverState.gameOver) return;
+            const boatTotal = riverState.boat.f + riverState.boat.h;
+            if (boatTotal === 0) {
+                document.getElementById('river-result').innerHTML = "<span class='text-burgundy'>Boat cannot cross empty!</span>";
+                return;
+            }
+
+            // Move boat
+            const dest = riverState.boatPos === 'left' ? 'right' : 'left';
+            riverState[dest].f += riverState.boat.f;
+            riverState[dest].h += riverState.boat.h;
+            riverState.boat.f = 0; riverState.boat.h = 0;
+            riverState.boatPos = dest;
+
+            renderRiver();
+
+            // Check game over / win conditions
+            const lF = riverState.left.f, lH = riverState.left.h;
+            const rF = riverState.right.f, rH = riverState.right.h;
+
+            if ((lF > 0 && lH > lF) || (rF > 0 && rH > rF)) {
+                riverState.gameOver = true;
+                document.getElementById('river-result').innerHTML = "<span class='text-burgundy'>🔴 HEDGEHOGS ATE FLAMINGOS! Game Over.</span>";
+            } else if (rF === 3 && rH === 3) {
+                riverState.gameOver = true;
+                document.getElementById('river-result').innerHTML = "<span class='text-green-700'>🟢 SAFELY CROSSED! Brilliant!</span>";
+            } else {
+                document.getElementById('river-result').innerText = "";
+            }
+        }
+
+        function resetRiver() {
+            riverState = { left: { f: 3, h: 3 }, right: { f: 0, h: 0 }, boat: { f: 0, h: 0 }, boatPos: 'left', gameOver: false };
+            document.getElementById('river-result').innerText = "";
+            renderRiver();
+        }
+
+        // --- GAME 5: EINSTEIN'S GRID ---
+        function renderEinstein() {
+            const game = activeGames.einstein;
+            document.getElementById('einstein-clues').innerHTML = game.clues.map(c => `<p class="py-0.5 border-b border-borderSepia/50 last:border-0">${c}</p>`).join('');
+
+            const optionsColor = ["Color?", "Green", "Red", "Blue"];
+            const optionsDrink = ["Drink?", "Milk", "Tea", "Water"];
+            const optionsPet = ["Pet?", "Cat", "Rabbit", "Dormouse"];
+
+            let gridHtml = '';
+            for (let i = 1; i <= 3; i++) {
+                gridHtml += `
+                    <div class="border border-borderSepia bg-white p-2 rounded text-center shadow-sm">
+                        <span class="font-display font-bold text-burgundy block mb-1">House #${i}</span>
+                        <select id="e-color-${i}" class="w-full bg-parchment border border-borderSepia rounded p-1 mb-1 text-[11px]">
+                            ${optionsColor.map(o => `<option value="${o}">${o}</option>`).join('')}
+                        </select>
+                        <select id="e-drink-${i}" class="w-full bg-parchment border border-borderSepia rounded p-1 mb-1 text-[11px]">
+                            ${optionsDrink.map(o => `<option value="${o}">${o}</option>`).join('')}
+                        </select>
+                        <select id="e-pet-${i}" class="w-full bg-parchment border border-borderSepia rounded p-1 text-[11px]">
+                            ${optionsPet.map(o => `<option value="${o}">${o}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+            }
+            document.getElementById('einstein-grid').innerHTML = gridHtml;
+        }
+
+        function checkEinstein() {
+            const sol = activeGames.einstein.solution;
+            let correct = true;
+
+            for (let i = 1; i <= 3; i++) {
+                const c = document.getElementById(`e-color-${i}`).value;
+                const d = document.getElementById(`e-drink-${i}`).value;
+                const p = document.getElementById(`e-pet-${i}`).value;
+
+                if (c !== sol[i-1].color || d !== sol[i-1].drink || p !== sol[i-1].pet) {
+                    correct = false;
+                    break;
+                }
+            }
+
+            const res = document.getElementById('einstein-result');
+            res.innerHTML = correct 
+                ? "<span class='text-green-700'>🟢 PERFECT DEDUCTION!</span>" 
+                : "<span class='text-burgundy'>🔴 INCORRECT MATCHES. Check clues again!</span>";
+        }
+
+        // --- GAME 6: CAUSALITY ---
+        function renderCausality() {
+            const game = activeGames.causality;
+            document.getElementById('cause-prompt').innerText = game.prompt;
+            document.getElementById('cause-runs').innerHTML = game.runs.map(r => `<p class="border-b border-borderSepia last:border-0 py-1.5">${r}</p>`).join('');
+            const shuffledOptions = [...game.options].sort(() => Math.random() - 0.5);
+            document.getElementById('cause-options').innerHTML = shuffledOptions.map(opt => `
+                <button onclick="checkSelection('cause-result', '${opt.replace(/'/g, "\\'")}', '${game.answer.replace(/'/g, "\\'")}')" class="p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans font-semibold w-full">${opt}</button>
+            `).join('');
+        }
+
+        // --- GAME 7: TAXONOMY ---
         function handleCardTap(ev, cardId) {
             ev.stopPropagation();
             const card = document.getElementById(cardId);
-            
             if (selectedCardEl === card) {
                 card.classList.remove('selected-card');
                 selectedCardEl = null;
@@ -341,22 +478,20 @@
         function renderTaxonomy() {
             const game = activeGames.taxonomy;
             document.getElementById('tax-prompt').innerText = game.prompt;
-            
-            // Randomize card order on load
             const shuffledCards = [...game.cards].sort(() => Math.random() - 0.5);
             
             const cardHtml = shuffledCards.map(c => `
-                <div id="${c.id}" data-type="${c.type}" draggable="true" ondragstart="drag(event)" onclick="handleCardTap(event, '${c.id}')" class="p-3 bg-white border border-borderSepia rounded cursor-pointer shadow-sm flex justify-between items-center text-sm sm:text-base">
+                <div id="${c.id}" data-type="${c.type}" draggable="true" ondragstart="drag(event)" onclick="handleCardTap(event, '${c.id}')" class="p-3 bg-white border border-borderSepia rounded cursor-pointer shadow-sm flex justify-between items-center text-xs sm:text-sm">
                     <span class="pointer-events-none">${c.text}</span>
                 </div>
             `).join('');
             document.getElementById('tax-cards').innerHTML = cardHtml;
 
             const bucketHtml = game.buckets.map(b => `
-                <div id="bucket-${b.id}" data-target="${b.id}" class="dropzone border-2 border-dashed border-borderSepia rounded-lg p-3 sm:p-4 min-h-[100px] sm:min-h-[120px] flex flex-col items-center justify-start bg-parchment/30 active:bg-burgundy/5" onclick="handleContainerTap(event, 'bucket-${b.id}')" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                <div id="bucket-${b.id}" data-target="${b.id}" class="dropzone border-2 border-dashed border-borderSepia rounded-lg p-3 min-h-[90px] flex flex-col items-center justify-start bg-parchment/30 active:bg-burgundy/5" onclick="handleContainerTap(event, 'bucket-${b.id}')" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
                     <div class="text-center pointer-events-none mb-2">
                         <span class="font-display font-bold text-burgundy text-xs sm:text-sm block">${b.icon} ${b.name}</span>
-                        <span class="font-sans text-[9px] sm:text-[10px] text-ink-muted uppercase tracking-wider block">${b.desc}</span>
+                        <span class="font-sans text-[9px] text-ink-muted uppercase tracking-wider block">${b.desc}</span>
                     </div>
                 </div>
             `).join('');
@@ -391,38 +526,7 @@
             res.innerHTML = correct ? "<span class='text-green-700'>🟢 VALID DEDUCTION!</span>" : "<span class='text-burgundy'>🔴 INVALID LOGIC. Try again.</span>";
         }
 
-        function renderCausality() {
-            const game = activeGames.causality;
-            document.getElementById('cause-prompt').innerText = game.prompt;
-            document.getElementById('cause-runs').innerHTML = game.runs.map(r => `<p class="border-b border-borderSepia last:border-0 py-1.5">${r}</p>`).join('');
-            
-            // Randomize options
-            const shuffledOptions = [...game.options].sort(() => Math.random() - 0.5);
-            document.getElementById('cause-options').innerHTML = shuffledOptions.map(opt => `
-                <button onclick="checkSelection('cause-result', '${opt.replace(/'/g, "\\'")}', '${game.answer.replace(/'/g, "\\'")}')" class="p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans font-semibold text-xs sm:text-sm">${opt}</button>
-            `).join('');
-        }
-
-        function renderSyllogism() {
-            const game = activeGames.syllogism;
-            document.getElementById('syl-premises').innerHTML = game.premises.map(p => `<p class="mb-1 last:mb-0">${p}</p>`).join('');
-            
-            const shuffledOptions = [...game.options].sort(() => Math.random() - 0.5);
-            document.getElementById('syl-options').innerHTML = shuffledOptions.map(opt => `
-                <button onclick="checkSelection('syl-result', '${opt.replace(/'/g, "\\'")}', '${game.answer.replace(/'/g, "\\'")}')" class="text-left p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans">${opt}</button>
-            `).join('');
-        }
-
-        function renderFallacy() {
-            const game = activeGames.fallacy;
-            document.getElementById('fal-quote').innerText = `"${game.quote}"`;
-            
-            const shuffledOptions = [...game.options].sort(() => Math.random() - 0.5);
-            document.getElementById('fal-options').innerHTML = shuffledOptions.map(opt => `
-                <button onclick="checkSelection('fal-result', '${opt.replace(/'/g, "\\'")}', '${game.answer.replace(/'/g, "\\'")}')" class="p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans font-semibold">${opt}</button>
-            `).join('');
-        }
-
+        // Shared selection check
         function checkSelection(resultElementId, selectedOption, correctOption) {
             const res = document.getElementById(resultElementId);
             if (selectedOption === correctOption) {
