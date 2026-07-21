@@ -30,7 +30,6 @@
         }
     </script>
     <style>
-        /* Mobile-friendly tap & drag styles */
         body { user-select: none; -webkit-user-select: none; }
         .dragging { opacity: 0.5; transform: scale(0.95); }
         .drag-over { border-color: #7A1C1C !important; background-color: rgba(122, 28, 28, 0.08) !important; }
@@ -48,7 +47,7 @@
         <p class="font-body italic text-ink-muted text-sm sm:text-lg mt-0.5">"Curiouser & Curiouser Logic for Sharp Minds"</p>
     </header>
 
-    <!-- Mobile-Optimized Navigation Tabs -->
+    <!-- Navigation Tabs -->
     <nav class="w-full max-w-2xl mt-4 mb-2">
         <div class="grid grid-cols-4 gap-1 sm:gap-2 text-center font-display text-[11px] sm:text-sm">
             <button onclick="switchTab('taxonomy')" id="tab-taxonomy" class="tab-btn active py-2 px-1 border-b-2 border-transparent text-ink-muted rounded-t touch-manipulation">🐛 Taxonomy</button>
@@ -121,6 +120,7 @@
     </main>
 
     <script>
+        // Expanded Database of Questions
         const db = {
             taxonomy: [
                 {
@@ -144,6 +144,39 @@
                         { id: "cause", icon: "⚡", name: "CAUSE & EFFECT", desc: "Origins / Results" },
                         { id: "opposition", icon: "☯️", name: "OPPOSITION", desc: "Contraries" }
                     ]
+                },
+                {
+                    prompt: "Sort the observations regarding the mysterious Cake and Potion.",
+                    cards: [
+                        { id: "t5", text: "The Cake expands one's physical form by a factor of ten.", type: "property" },
+                        { id: "t6", text: "The 'Drink Me' Potion is a liquid mixture, whilst the Cake is a baked solid.", type: "difference" }
+                    ],
+                    buckets: [
+                        { id: "property", icon: "✨", name: "PROPERTY", desc: "Characteristics" },
+                        { id: "difference", icon: "🔍", name: "DIFFERENCE", desc: "Distinctions" }
+                    ]
+                },
+                {
+                    prompt: "Sort the observations regarding the March Hare and the Mad Hatter.",
+                    cards: [
+                        { id: "t7", text: "The Hatter and the Hare share an endless state of Tea-Time.", type: "similarity" },
+                        { id: "t8", text: "Because the Hatter offended Time, the clocks are forever stuck at 6:00.", type: "cause" }
+                    ],
+                    buckets: [
+                        { id: "cause", icon: "⚡", name: "CAUSE & EFFECT", desc: "Origins / Results" },
+                        { id: "similarity", icon: "👯", name: "SIMILARITY", desc: "Shared Traits" }
+                    ]
+                },
+                {
+                    prompt: "Sort the observations regarding the Queen's Roses.",
+                    cards: [
+                        { id: "t9", text: "White roses are entirely lacking in the Queen's favored crimson hue.", type: "privation" },
+                        { id: "t10", text: "A painted rose is merely a deception hiding a natural flower.", type: "definition" }
+                    ],
+                    buckets: [
+                        { id: "definition", icon: "✒️", name: "DEFINITION", desc: "Essence & Genus" },
+                        { id: "privation", icon: "🥀", name: "PRIVATION", desc: "Absence of Quality" }
+                    ]
                 }
             ],
             causality: [
@@ -166,18 +199,63 @@
                     ],
                     options: ["Wind Key", "Butter applied", "Tea spilled", "No Tea"],
                     answer: "Butter applied"
+                },
+                {
+                    prompt: "Why does the Dormouse suddenly wake up?",
+                    runs: [
+                        "Run 1: Hot Tea, Loud Singing, Hatter's Hat -> Remains Asleep",
+                        "Run 2: No Tea, Loud Singing, Hatter's Hat -> Remains Asleep",
+                        "Run 3: Hot Tea, Pinched Nose, Hatter's Hat -> Wakes Up"
+                    ],
+                    options: ["Hot Tea", "Loud Singing", "Hatter's Hat", "Pinched Nose"],
+                    answer: "Pinched Nose"
+                },
+                {
+                    prompt: "Why do the White Roses keep turning Red?",
+                    runs: [
+                        "Run 1: Sunshine, Cards Painting, Queen Yelling -> Roses Turn Red",
+                        "Run 2: Rain, Cards Painting, Queen Silent -> Roses Turn Red",
+                        "Run 3: Sunshine, Cards Sleeping, Queen Yelling -> Roses Stay White"
+                    ],
+                    options: ["Sunshine", "Cards Painting", "Queen Yelling", "Rain"],
+                    answer: "Cards Painting"
+                },
+                {
+                    prompt: "Why does the baby transform into a pig?",
+                    runs: [
+                        "Run 1: Rocking, Pepper in Air, Duchess Sneezing -> Turns to Pig",
+                        "Run 2: Rocking, No Pepper, Duchess Sneezing -> Stays a Baby",
+                        "Run 3: No Rocking, Pepper in Air, No Sneezing -> Turns to Pig"
+                    ],
+                    options: ["Rocking", "Pepper in Air", "Duchess Sneezing", "No Rocking"],
+                    answer: "Pepper in Air"
                 }
             ],
             syllogism: [
                 {
                     premises: ["1. All Borogoves are mimsy creatures.", "2. No mimsy creatures are fierce."],
-                    options: ["All Borogoves are fierce.", "No Borogoves are fierce.", "Some mimsy creatures are Borogoves."],
+                    options: ["All Borogoves are fierce.", "No Borogoves are fierce.", "Some mimsy creatures are Borogoves.", "All fierce things are mimsy."],
                     answer: "No Borogoves are fierce."
                 },
                 {
                     premises: ["1. All slithy toves gyre and gumble.", "2. Everything that gyres and gumbles makes a racket."],
-                    options: ["All slithy toves make a racket.", "No slithy toves make a racket.", "Some rackets are slithy."],
+                    options: ["All slithy toves make a racket.", "No slithy toves make a racket.", "Some rackets are slithy.", "Gyring is always silent."],
                     answer: "All slithy toves make a racket."
+                },
+                {
+                    premises: ["1. All Bread-and-Butterflies have wings of thin slices of bread.", "2. Some creatures with wings of bread dissolve in tea."],
+                    options: ["All Bread-and-Butterflies dissolve in tea.", "No Bread-and-Butterflies dissolve in tea.", "Some Bread-and-Butterflies may dissolve in tea.", "All tea dissolves wings."],
+                    answer: "Some Bread-and-Butterflies may dissolve in tea."
+                },
+                {
+                    premises: ["1. If it is time for tea, the Hatter is sitting at the table.", "2. The Hatter is not sitting at the table."],
+                    options: ["It is time for tea.", "It is not time for tea.", "The March Hare is drinking.", "The table is empty."],
+                    answer: "It is not time for tea."
+                },
+                {
+                    premises: ["1. No playing cards can stand up to a strong wind.", "2. The Queen of Hearts is a playing card."],
+                    options: ["The Queen of Hearts causes wind.", "The Queen of Hearts can stand up to a strong wind.", "The Queen of Hearts cannot stand up to a strong wind.", "Some winds are playing cards."],
+                    answer: "The Queen of Hearts cannot stand up to a strong wind."
                 }
             ],
             fallacy: [
@@ -190,6 +268,26 @@
                     quote: "You claim my soup has too much pepper? Well, you are just an uneducated child who doesn't know fine culinary arts!",
                     options: ["Ad Hominem", "Appeal to Ignorance", "Red Herring", "False Dilemma"],
                     answer: "Ad Hominem"
+                },
+                {
+                    quote: "The Queen of Hearts said the sky is green, and she is the absolute ruler, so the sky must be green!",
+                    options: ["Appeal to Authority", "Slippery Slope", "Hasty Generalization", "Circular Reasoning"],
+                    answer: "Appeal to Authority"
+                },
+                {
+                    quote: "Alice: 'What time is it?'\nHatter: 'Why is a raven like a writing desk?'",
+                    options: ["Ad Hominem", "False Cause", "Red Herring", "Appeal to Emotion"],
+                    answer: "Red Herring"
+                },
+                {
+                    quote: "If we don't behead the Knave for stealing the tarts, next he will steal the crown, and then the whole kingdom will collapse into absolute chaos!",
+                    options: ["Slippery Slope", "Straw Man", "Bandwagon", "False Dilemma"],
+                    answer: "Slippery Slope"
+                },
+                {
+                    quote: "I am perfectly correct, because I never make mistakes!",
+                    options: ["Circular Reasoning", "Ad Hominem", "Appeal to Ignorance", "Red Herring"],
+                    answer: "Circular Reasoning"
                 }
             ]
         };
@@ -198,6 +296,7 @@
         let selectedCardEl = null;
 
         window.onload = () => {
+            // Randomly select one prompt from the expanded arrays every time the page loads
             activeGames.taxonomy = db.taxonomy[Math.floor(Math.random() * db.taxonomy.length)];
             activeGames.causality = db.causality[Math.floor(Math.random() * db.causality.length)];
             activeGames.syllogism = db.syllogism[Math.floor(Math.random() * db.syllogism.length)];
@@ -216,7 +315,6 @@
             document.getElementById('tab-' + tabId).classList.add('active');
         }
 
-        // --- MOBILE TAP & DESKTOP DRAG HANDLERS ---
         function handleCardTap(ev, cardId) {
             ev.stopPropagation();
             const card = document.getElementById(cardId);
@@ -244,7 +342,10 @@
             const game = activeGames.taxonomy;
             document.getElementById('tax-prompt').innerText = game.prompt;
             
-            const cardHtml = game.cards.map(c => `
+            // Randomize card order on load
+            const shuffledCards = [...game.cards].sort(() => Math.random() - 0.5);
+            
+            const cardHtml = shuffledCards.map(c => `
                 <div id="${c.id}" data-type="${c.type}" draggable="true" ondragstart="drag(event)" onclick="handleCardTap(event, '${c.id}')" class="p-3 bg-white border border-borderSepia rounded cursor-pointer shadow-sm flex justify-between items-center text-sm sm:text-base">
                     <span class="pointer-events-none">${c.text}</span>
                 </div>
@@ -294,24 +395,31 @@
             const game = activeGames.causality;
             document.getElementById('cause-prompt').innerText = game.prompt;
             document.getElementById('cause-runs').innerHTML = game.runs.map(r => `<p class="border-b border-borderSepia last:border-0 py-1.5">${r}</p>`).join('');
-            document.getElementById('cause-options').innerHTML = game.options.map(opt => `
-                <button onclick="checkSelection('cause-result', '${opt}', '${game.answer}')" class="p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans font-semibold text-xs sm:text-sm">${opt}</button>
+            
+            // Randomize options
+            const shuffledOptions = [...game.options].sort(() => Math.random() - 0.5);
+            document.getElementById('cause-options').innerHTML = shuffledOptions.map(opt => `
+                <button onclick="checkSelection('cause-result', '${opt.replace(/'/g, "\\'")}', '${game.answer.replace(/'/g, "\\'")}')" class="p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans font-semibold text-xs sm:text-sm">${opt}</button>
             `).join('');
         }
 
         function renderSyllogism() {
             const game = activeGames.syllogism;
             document.getElementById('syl-premises').innerHTML = game.premises.map(p => `<p class="mb-1 last:mb-0">${p}</p>`).join('');
-            document.getElementById('syl-options').innerHTML = game.options.map(opt => `
-                <button onclick="checkSelection('syl-result', '${opt}', '${game.answer}')" class="text-left p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans">${opt}</button>
+            
+            const shuffledOptions = [...game.options].sort(() => Math.random() - 0.5);
+            document.getElementById('syl-options').innerHTML = shuffledOptions.map(opt => `
+                <button onclick="checkSelection('syl-result', '${opt.replace(/'/g, "\\'")}', '${game.answer.replace(/'/g, "\\'")}')" class="text-left p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans">${opt}</button>
             `).join('');
         }
 
         function renderFallacy() {
             const game = activeGames.fallacy;
             document.getElementById('fal-quote').innerText = `"${game.quote}"`;
-            document.getElementById('fal-options').innerHTML = game.options.map(opt => `
-                <button onclick="checkSelection('fal-result', '${opt}', '${game.answer}')" class="p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans font-semibold">${opt}</button>
+            
+            const shuffledOptions = [...game.options].sort(() => Math.random() - 0.5);
+            document.getElementById('fal-options').innerHTML = shuffledOptions.map(opt => `
+                <button onclick="checkSelection('fal-result', '${opt.replace(/'/g, "\\'")}', '${game.answer.replace(/'/g, "\\'")}')" class="p-3 border border-borderSepia bg-white rounded hover:border-gold active:bg-gold/10 transition shadow-sm font-sans font-semibold">${opt}</button>
             `).join('');
         }
 
